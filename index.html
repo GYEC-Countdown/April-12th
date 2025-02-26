@@ -1,189 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Reveal Countdown</title>
-    <style>
-        body {
-            background-color: #121212;
-            color: #f0f0f0;
-            font-family: 'Courier New', monospace;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-            overflow: hidden;
-        }
-
-        .container {
-            max-width: 800px;
-        }
-
-        .title {
-            font-size: 24px;
-            margin-bottom: 30px;
-            color: #3498db;
-            text-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
-        }
-
-        .countdown {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .countdown-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .digit-container {
-            padding: 10px;
-        }
-
-        .digit {
-            font-size: 14px;
-            line-height: 1;
-            white-space: pre;
-            color: #3498db;
-            text-shadow: 0 0 5px rgba(52, 152, 219, 0.7);
-        }
-
-        .label {
-            font-size: 16px;
-            margin-top: 10px;
-            color: #7f8c8d;
-        }
-
-        .message {
-            font-size: 18px;
-            margin-top: 20px;
-            opacity: 0.7;
-        }
-
-        @media (max-width: 600px) {
-            .digit {
-                font-size: 10px;
-            }
-            .countdown {
-                gap: 10px;
-            }
-        }
-    </style>
-</head>
-<body>
+    <link rel="stylesheet" href="web.css" />
+  </head>
+  <body>
     <div class="container">
-        <div class="title">COUNTDOWN TO APRIL 12TH</div>
-        <div class="countdown">
-            <div class="countdown-item" id="days-container">
-                <div class="digit-container">
-                    <pre class="digit" id="days-ascii">00</pre>
-                </div>
-                <div class="label">DAYS</div>
-            </div>
-            <div class="countdown-item" id="hours-container">
-                <div class="digit-container">
-                    <pre class="digit" id="hours-ascii">00</pre>
-                </div>
-                <div class="label">HOURS</div>
-            </div>
-            <div class="countdown-item" id="minutes-container">
-                <div class="digit-container">
-                    <pre class="digit" id="minutes-ascii">00</pre>
-                </div>
-                <div class="label">MINUTES</div>
-            </div>
-            <div class="countdown-item" id="seconds-container">
-                <div class="digit-container">
-                    <pre class="digit" id="seconds-ascii">00</pre>
-                </div>
-                <div class="label">SECONDS</div>
-            </div>
+      <div class="title">COUNTDOWN TO APRIL 12TH</div>
+      <div class="countdown">
+        <div class="countdown-item" id="days-container">
+          <div class="digit-container">
+            <pre class="digit" id="days-ascii">00</pre>
+          </div>
+          <div class="label">DAYS</div>
         </div>
-        <div class="message" id="countdown-message">The countdown has begun...</div>
+        <div class="countdown-item" id="hours-container">
+          <div class="digit-container">
+            <pre class="digit" id="hours-ascii">00</pre>
+          </div>
+          <div class="label">HOURS</div>
+        </div>
+        <div class="countdown-item" id="minutes-container">
+          <div class="digit-container">
+            <pre class="digit" id="minutes-ascii">00</pre>
+          </div>
+          <div class="label">MINUTES</div>
+        </div>
+        <div class="countdown-item" id="seconds-container">
+          <div class="digit-container">
+            <pre class="digit" id="seconds-ascii">00</pre>
+          </div>
+          <div class="label">SECONDS</div>
+        </div>
+      </div>
+      <div class="message" id="countdown-message">
+        The countdown has begun...
+      </div>
     </div>
 
-    <script>
-        // ASCII art digits templates
-        const asciiDigits = {
-            '0': ` ██████ \n██    ██\n██    ██\n██    ██\n ██████ `,
-            '1': `   ██   \n ████   \n   ██   \n   ██   \n ██████ `,
-            '2': ` ██████ \n██    ██\n    ██  \n  ██    \n████████`,
-            '3': ` ██████ \n      ██\n   ████ \n      ██\n ██████ `,
-            '4': `██    ██\n██    ██\n████████\n      ██\n      ██`,
-            '5': `████████\n██      \n██████  \n      ██\n ██████ `,
-            '6': ` ██████ \n██      \n██████  \n██    ██\n ██████ `,
-            '7': `████████\n     ██ \n    ██  \n   ██   \n  ██    `,
-            '8': ` ██████ \n██    ██\n ██████ \n██    ██\n ██████ `,
-            '9': ` ██████ \n██    ██\n ███████\n      ██\n ██████ `
-        };
-
-        // Function to convert a number to an ASCII art representation
-        function numberToAscii(number) {
-            // Ensure we have two digits with leading zero if needed
-            const numberStr = number.toString().padStart(2, '0');
-            
-            // Split the ASCII art for each digit into lines
-            const digitLines = [];
-            for (let i = 0; i < 5; i++) {
-                let line = '';
-                for (const digit of numberStr) {
-                    line += asciiDigits[digit].split('\n')[i] + '  ';
-                }
-                digitLines.push(line);
-            }
-            
-            return digitLines.join('\n');
-        }
-
-        // Function to update countdown
-        function updateCountdown() {
-            const now = new Date();
-            const currentYear = now.getFullYear();
-            const targetDate = new Date(currentYear, 3, 12); // Month is 0-indexed, so 6 is July
-            
-            // If July 1st has already passed this year, set target to next year
-            if (now > targetDate) {
-                targetDate.setFullYear(currentYear + 1);
-            }
-            
-            const diff = targetDate - now;
-            
-            // Calculate time components
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-            
-            // Update ASCII art
-            document.getElementById('days-ascii').textContent = numberToAscii(days);
-            document.getElementById('hours-ascii').textContent = numberToAscii(hours);
-            document.getElementById('minutes-ascii').textContent = numberToAscii(minutes);
-            document.getElementById('seconds-ascii').textContent = numberToAscii(seconds);
-            
-            // Update message if countdown is over
-            if (diff <= 0) {
-                document.getElementById('countdown-message').textContent = "The date has arrived!";
-            } else {
-                const targetYear = targetDate.getFullYear();
-                document.getElementById('countdown-message').textContent = 
-                    `Counting down to April 12th, ${targetYear} in your local time zone`;
-            }
-        }
-
-        // Initialize countdown
-        updateCountdown();
-        
-        // Update countdown every second
-        setInterval(updateCountdown, 1000);
-    </script>
-</body>
+    <script src="main.js"></script>
+  </body>
 </html>
