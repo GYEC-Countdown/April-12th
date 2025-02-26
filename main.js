@@ -68,7 +68,7 @@
       const targetYear = targetDate.getFullYear();
       document.getElementById(
         "countdown-message"
-      ).textContent = `Counting down to April 12th, ${targetYear} in your local time zone`;
+      ).textContent = `Something cool may just come out on ${targetDate.getDate()}th of ${targetDate.toLocaleString('default', { month: 'long' })} ${targetDate.getFullYear()}`;
     }
   }
 
